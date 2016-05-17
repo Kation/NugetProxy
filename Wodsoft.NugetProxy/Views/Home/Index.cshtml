@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "总览";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<div class="jumbotron">
+    <h1>欢迎使用Nuget代理</h1>
+    <p>
+        本站已缓存页面：@ViewBag.PageCount
+        <br />
+        本站已缓存包：@ViewBag.PackageCount
+    </p>
+    <p><a class="btn btn-primary btn-lg" href="@Url.Action("Help")" role="button">使用NuGet代理</a></p>
+</div>

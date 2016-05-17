@@ -244,7 +244,6 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Areas\Admin\Views\web.config" />
     <None Include="Properties\PublishProfiles\File.pubxml" />
     <None Include="Properties\PublishProfiles\IIS.pubxml" />
     <Content Include="scripts\bootstrap.js" />
@@ -351,18 +350,13 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityControllerFactory.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
-    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
-    <Compile Include="Areas\Admin\Controllers\MemberController.cs" />
-    <Compile Include="Areas\Admin\Controllers\SourceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DataContext.cs" />
-    <Compile Include="Models\Member.cs" />
     <Compile Include="Models\Page.cs" />
-    <Compile Include="Models\Source.cs" />
     <Compile Include="NugetDownloader.cs" />
     <Compile Include="NugetHandler.cs" />
     <Compile Include="NugetPackageHandler.cs" />
@@ -373,10 +367,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Areas\Admin\Views\Member\" />
-    <Folder Include="Areas\Admin\Views\Shared\" />
-    <Folder Include="Areas\Admin\Views\Source\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

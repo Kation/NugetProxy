@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{14394F96-D85F-4AFB-AF8E-BAB430E91C4B}"
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Wodsoft.NugetProxy", "src\Wodsoft.NugetProxy\Wodsoft.NugetProxy.xproj", "{9F8C5812-B820-434A-906E-05D7608788B4}"

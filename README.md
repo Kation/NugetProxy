@@ -1,6 +1,7 @@
-# Nuget´úÀí
-»ùÓÚ»º´æµÄ´úÀíNuget API V2³ÌĞò¡£
+ï»¿# Nugetä»£ç†
+åŸºäºç¼“å­˜çš„ä»£ç†Nuget API V2ç¨‹åºã€‚  
+ä½¿ç”¨Asp.Net Core RC2
 
->¹ãÎ÷µçĞÅ°ÙÕ×£º  
+>å¹¿è¥¿ç”µä¿¡ç™¾å…†ï¼š  
 >http://nuget.lzzy.net/  
 >http://nuget.lzzy.net/api/v2

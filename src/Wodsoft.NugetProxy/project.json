@@ -1,4 +1,6 @@
 {
+  "title": "Nuget代理程序",
+  "copyright": "Wodsoft",
   "dependencies": {
     "Microsoft.NETCore.App": {
       "version": "1.0.0-rc2-3002702",

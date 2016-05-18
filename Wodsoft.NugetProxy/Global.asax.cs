@@ -16,6 +16,8 @@ namespace Wodsoft.NugetProxy
 
         public static string NugetSource { get; private set; }
 
+        public static string UrlReplace { get; private set; }
+
         public static int DefaultCacheTime { get; private set; }
 
         public static int ListCacheTime { get; private set; }
@@ -31,6 +33,7 @@ namespace Wodsoft.NugetProxy
                 Directory.CreateDirectory(packagePath);
 
             NugetSource = WebConfigurationManager.AppSettings["source"];
+            UrlReplace = WebConfigurationManager.AppSettings["replace"];
             DefaultCacheTime = int.Parse(WebConfigurationManager.AppSettings["defaultCacheTime"]);
             ListCacheTime = int.Parse(WebConfigurationManager.AppSettings["listCacheTime"]);
             DetailCacheTime = int.Parse(WebConfigurationManager.AppSettings["detailCacheTime"]);

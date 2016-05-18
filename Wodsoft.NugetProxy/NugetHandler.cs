@@ -87,7 +87,7 @@ namespace Wodsoft.NugetProxy
                             if (context.Request.Url.Port != 80)
                                 replaceTo += ":" + context.Request.Url.Port;
                             replaceTo += "/api/v2";
-                            content = content.Replace(MvcApplication.NugetSource, replaceTo);
+                            content = content.Replace(MvcApplication.UrlReplace, replaceTo);
                             page.Content = Encoding.UTF8.GetBytes(content);
                             page.ExpiredDate = DateTime.Now.AddSeconds(GetCacheTime(_action));
                         }

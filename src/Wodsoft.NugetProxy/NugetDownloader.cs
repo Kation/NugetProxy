@@ -28,7 +28,6 @@ namespace Wodsoft.NugetProxy
             Stream = new MemoryStream();
             StatusCode = HttpStatusCode.Accepted;
             HttpWebRequest webRequest = HttpWebRequest.CreateHttp(Url);
-            //webRequest.Timeout = 5000;
             HttpWebResponse webResponse;
             try
             {
@@ -41,7 +40,6 @@ namespace Wodsoft.NugetProxy
                 return;
             }
             var stream = webResponse.GetResponseStream();
-            stream.ReadTimeout = 5000;
             try
             {
                 while (true)

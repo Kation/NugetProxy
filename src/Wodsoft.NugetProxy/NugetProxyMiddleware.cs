@@ -11,6 +11,7 @@ using System.Net;
 using System.IO;
 using System.Text;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace Wodsoft.NugetProxy
 {
@@ -28,8 +29,7 @@ namespace Wodsoft.NugetProxy
             DataContext dataContext;
             try
             {
-                dataContext = new DataContext();
-                await dataContext.Database.EnsureCreatedAsync();
+                dataContext = httpContext.RequestServices.GetRequiredService<DataContext>();
                 page = dataContext.Page.SingleOrDefault(t => t.Path == path);
             }
             catch (Exception ex)

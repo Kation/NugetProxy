@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Wodsoft.NugetProxy.Models;
-using Microsoft.EntityFrameworkCore;
-using System.IO;
 
 namespace Wodsoft.NugetProxy.Controllers
 {
@@ -13,7 +14,7 @@ namespace Wodsoft.NugetProxy.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            DataContext context = new DataContext();
+            DataContext context = HttpContext.RequestServices.GetRequiredService<DataContext>();
             ViewBag.PageCount = await context.Page.CountAsync();
             ViewBag.PackageCount = new DirectoryInfo("Packages").GetFiles().Length;
             return View();

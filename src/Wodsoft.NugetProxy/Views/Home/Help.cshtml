@@ -1,0 +1,21 @@
+﻿﻿@{
+    ViewBag.Title = "使用帮助";
+}
+<p>
+    <img src="~/Images/step1.png" />
+</p>
+<p>
+    打开程序包管理器设置。
+</p>
+<p>
+    <img src="~/Images/step2.png" />
+</p>
+<p>
+    首先，点击“＋”新增按钮。
+    <br />
+    修改名称为Nuget Proxy，源为@(Context.Request.Scheme)://@(Context.Request.Host)/api/v2/
+    <br />
+    然后点击更新按钮，并取消勾选其它程序包源。
+    <br />
+    点击确定完成修改。
+</p>

@@ -30,11 +30,12 @@ namespace Wodsoft.NugetProxy
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
-            services.AddDbContext<DataContext>(builder=>
+            services.AddDbContext<DataContext>(builder =>
             {
                 builder.UseSqlServer(Configuration.GetConnectionString("DataContext"));
             });
+
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,7 +56,7 @@ namespace Wodsoft.NugetProxy
 
             app.UseStaticFiles();
 
-            app.UseNugetProxyMiddleware();
+            app.UseNugetProxyMiddleware(Configuration);
 
             app.UseMvc(routes =>
             {

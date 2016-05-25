@@ -12,17 +12,21 @@ using System.IO;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Wodsoft.NugetProxy
 {
     public static class NugetProxyMiddleware
     {
+        private static string _Source, _Replace, _Path;
+
         private static async Task PageHandler(HttpContext httpContext)
         {
             string action = httpContext.GetRouteValue("action") as string;
-            string path = httpContext.Request.Path.Value;
+            string path = httpContext.Request.Path.Value + httpContext.Request.QueryString.Value;
             var host = httpContext.Request.Host;
             var schema = httpContext.Request.Scheme;
+            string apiPath = path.Substring(_Path.Length);
 
             await SynchronizationHelp.Enter(path);
             Page page;
@@ -63,15 +67,15 @@ namespace Wodsoft.NugetProxy
                 }
                 if (download)
                 {
-                    NugetDownloader downloader = new NugetDownloader("https://www.nuget.org" + httpContext.Request.Path.Value + httpContext.Request.QueryString.Value);
+                    NugetDownloader downloader = new NugetDownloader(_Source + apiPath);
                     Task downloadTask = downloader.Download().ContinueWith(async t =>
                     {
                         if (downloader.StatusCode == HttpStatusCode.OK)
                         {
                             var reader = new StreamReader(downloader.Stream);
                             var content = await reader.ReadToEndAsync();
-                            string replaceTo = schema + "://" + host;
-                            content = content.Replace("https://www.nuget.org/api/v2", replaceTo + "/api/v2");
+                            string replaceTo = schema + "://" + host + _Path;
+                            content = content.Replace(_Replace, replaceTo);
                             page.Content = Encoding.UTF8.GetBytes(content);
                             page.ExpiredDate = DateTime.Now.AddMinutes(GetCacheTime(action));
                             page.ContentType = downloader.ContentType;
@@ -138,7 +142,7 @@ namespace Wodsoft.NugetProxy
             {
                 try
                 {
-                    NugetDownloader downloader = new NugetDownloader("https://www.nuget.org/api/v2/package/" + id + "/" + version);
+                    NugetDownloader downloader = new NugetDownloader(_Source + "/package/" + id + "/" + version);
                     downloader.Progress += async (sender, buffer, length) =>
                     {
                         if (stream == null)
@@ -176,6 +180,7 @@ namespace Wodsoft.NugetProxy
             }
         }
 
+        private static int _CacheMetadata, _CacheList, _CacheDetail, _CacheDefault;
         private static int GetCacheTime(string action)
         {
             switch (action)
@@ -183,13 +188,13 @@ namespace Wodsoft.NugetProxy
                 case "":
                 case "/":
                 case "$metadata":
-                    return 60 * 24 * 7;
+                    return _CacheMetadata;
                 case "search()":
-                    return 60;
+                    return _CacheList;
                 case "findpackagesbyid()":
-                    return 60 * 12;
+                    return _CacheDetail;
                 default:
-                    return 30;
+                    return _CacheDefault;
             }
         }
 
@@ -200,15 +205,28 @@ namespace Wodsoft.NugetProxy
             log.LogError(new EventId(), ex, "Nuget handle error");
         }
 
-        public static IApplicationBuilder UseNugetProxyMiddleware(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseNugetProxyMiddleware(this IApplicationBuilder builder, IConfigurationRoot config)
         {
             if (!Directory.Exists("Packages"))
                 Directory.CreateDirectory("Packages");
+            
+            var cacheSection = config.GetSection("Cache");
+            _CacheMetadata = int.Parse(cacheSection.GetSection("Metadata").Value);
+            _CacheList = int.Parse(cacheSection.GetSection("List").Value);
+            _CacheDetail = int.Parse(cacheSection.GetSection("Detail").Value);
+            _CacheDefault = int.Parse(cacheSection.GetSection("Default").Value);
+            var proxySection = config.GetSection("Proxy");
+            _Source = proxySection.GetSection("Source").Value;
+            _Replace = proxySection.GetSection("Replace").Value;
+            _Path = proxySection.GetSection("Path").Value;
 
             var routeBuilder = new RouteBuilder(builder);
-            routeBuilder.MapGet("api/v2/{action}", PageHandler);
-            routeBuilder.MapGet("api/v2", PageHandler);
-            routeBuilder.MapGet("api/v2/package/{id}/{version}", PackageHandler);
+            routeBuilder.MapGet(_Path + "/{action}", PageHandler);
+            routeBuilder.MapGet(_Path, PageHandler);
+            routeBuilder.MapGet(_Path + "/package/{id}/{version}", PackageHandler);
+
+            _Path = "/" + _Path;
+
             var router = routeBuilder.Build();
             return builder.UseRouter(router);
         }

@@ -33,7 +33,9 @@ namespace Wodsoft.NugetProxy
             DataContext dataContext;
             try
             {
-                dataContext = httpContext.RequestServices.GetRequiredService<DataContext>();
+                //使用httpContext.RequestServices.GetRequiredService获取DataContext会导致后台下载线程保存Page时报错
+                //因为DataContext已经被释放
+                dataContext = new DataContext(new DbContextOptionsBuilder<DataContext>().UseSqlServer(_ConnectionString).Options);
                 page = dataContext.Page.SingleOrDefault(t => t.Path == path);
             }
             catch (Exception ex)
@@ -205,8 +207,11 @@ namespace Wodsoft.NugetProxy
             log.LogError(new EventId(), ex, "Nuget handle error");
         }
 
+        private static string _ConnectionString;
         public static IApplicationBuilder UseNugetProxyMiddleware(this IApplicationBuilder builder, IConfigurationRoot config)
         {
+            _ConnectionString = config.GetConnectionString("DataContext");
+
             if (!Directory.Exists("Packages"))
                 Directory.CreateDirectory("Packages");
             

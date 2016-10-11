@@ -178,7 +178,14 @@ namespace Wodsoft.NugetProxy
                 SynchronizationHelp.Exit(filename);
                 //context.Request.Headers["Range"]
                 stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
-                await stream.CopyToAsync(httpContext.Response.Body);
+                try
+                {
+                    await stream.CopyToAsync(httpContext.Response.Body);
+                }
+                finally
+                {
+                    stream.Dispose();
+                }
             }
         }
 
